@@ -11,7 +11,7 @@ pos_data pos = {};
 nav_control nav = { 
   60,  // P_coef
   0,   // I_coef
-  0,   // D_coef
+  40,   // D_coef
 };
 
 
@@ -19,22 +19,23 @@ nav_control nav = {
 // Drive to specified coordinate location
 void drive_to (float x_dest, float y_dest, float ang_dest, int throttle) {
   // Find error between current heading and desired heading
-  float ang_error = atan2(pos.x-x_dest, pos.y-y_dest) - pos.ang - 3.1416;
+  float ang_error = atan2(pos.x-x_dest, pos.y-y_dest) - pos.ang - PI;
   float last_ang_error;
 
   // Calculate desired heading until within 1/2" of desired position
   while(abs(pos.x - x_dest) > .5 || abs(pos.y - y_dest) > .5) {
     last_ang_error = ang_error;
-    ang_error = atan2(pos.x-x_dest, pos.y-y_dest) - pos.ang - 3.1416;
-    while (ang_error >= 3.1416 || ang_error < -3.1416) {
-      if (ang_error >= 3.1416)
-        ang_error -= 6.2832;
-      else if (ang_error < -3.1416)
-        ang_error += 6.2832;
+    ang_error = atan2(pos.x-x_dest, pos.y-y_dest) - pos.ang - PI;
+    while (ang_error >= PI || ang_error < -PI) {
+      if (ang_error >= PI)
+        ang_error -= 2*PI;
+      else if (ang_error < -1*PI)
+        ang_error += 2*PI;
     }
 
     // Compute control response to achieve desired heading
-    int des_turn = nav.P_coef*ang_error;
+    int des_turn = (int)((nav.P_coef * ang_error)
+      + (nav.D_coef * (last_ang_error - ang_error)));
 
     // Disallow reverse turning of the wheels (TEMP hopefully)
     if (des_turn < -1*throttle)
@@ -48,6 +49,8 @@ void drive_to (float x_dest, float y_dest, float ang_dest, int throttle) {
   }
   
   // Stop at destination
+  drive(0,0);
+  drive(0,0);
   drive(0,0);
 }
 
@@ -77,9 +80,9 @@ void update_pos() {
   // Add angular change to current estimate
   pos.ang += theta;
   if (pos.ang < 0)
-    pos.ang += 6.28319;
-  else if (pos.ang > 6.28319)
-    pos.ang -= 6.28319;
+    pos.ang += 2*PI;
+  else if (pos.ang > 2*PI)
+    pos.ang -= 2*PI;
 
   // Add position change to current estimate
   pos.x += mag*sin(pos.ang);

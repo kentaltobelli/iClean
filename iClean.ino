@@ -17,14 +17,13 @@ void setup() {
 
 void loop() {
   // Test things!
-  drive_to(0,24,0,60);
-  drive_to(24,24,0,60);
-  drive_to(24,0,0,60);
-
+  drive_to(0,48,0,100);
+  
   // Drive back to origin
   drive_to(0.0, 0.0, 0.0, 50);
 
   // Chill out having accomplished a great thing
   chill(250, -1);  // -1 for infinite chill sesh
 }
+
 

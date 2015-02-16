@@ -36,6 +36,7 @@ private:
 
   // Control system values
   struct control_system {
+    float speed_coef;
     float P_coef;
     float I_coef;
     float D_coef;
@@ -45,6 +46,7 @@ private:
     //float last_drive;
     float error;  // Error -> control response
     float last_error;
+    float accum_error;
     int ctrl_pwm;  // Calculated control response
     int last_ctrl_pwm;
   } control;

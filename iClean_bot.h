@@ -10,7 +10,7 @@
 #define WHEEL_BASE_CIR 2*5.5*3.141592653
 #define ENCODER_TICKS 64
 // Performance constraint settings
-#define SLEW_RATE 75
+#define SLEW_RATE 50
 #define LOOP_TIME 100
 // Calculated once to save clock cycles later
 #define TICK_DIST WHEEL_CIR/ENCODER_TICKS

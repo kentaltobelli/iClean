@@ -9,9 +9,11 @@ CMotor::CMotor() {
 // Custom Constructor
 CMotor::CMotor(int IN1, int IN2, int Pwm) {
   // Initialize control system structure components
-  control.P_coef = 20;
-  control.I_coef = 0;
-  control.D_coef = 0;
+  control.speed_coef = 1.54;
+  control.P_coef = 10;
+  control.I_coef = 1;
+  control.D_coef = 5;
+  control.accum_error = 0;
   control.drive = 0;
   control.ticks = 0;
   control.ctrl_pwm = 0;
@@ -41,12 +43,15 @@ void CMotor::control_motor(int desir_spd) {
   // Find error
   control.last_error = control.error;
   control.error = ((LOOP_TIME*control.drive)/1000) - (float)control.ticks;
+  control.accum_error += control.error;
   control.last_ticks = control.ticks;
   control.ticks = 0;
 
   // Calculate response
   control.last_ctrl_pwm = control.ctrl_pwm;
-  control.ctrl_pwm = (int)((1.54*control.drive) + (control.P_coef * control.error)); // add D and I later
+  control.ctrl_pwm = (int)((control.speed_coef*control.drive) + (control.P_coef * control.error)
+    + (control.D_coef * (control.last_error - control.error))
+    + (control.I_coef * (control.accum_error)));
 
     // Limit response range
   if (control.ctrl_pwm < -255)
