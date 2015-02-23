@@ -92,3 +92,11 @@ void CMotor::update_motor() {
     analogWrite(pins.Pwm, control.ctrl_pwm);
   }
 }
+
+
+
+void CMotor::halt()
+{
+  control.ctrl_pwm = 0;
+  update_motor();
+}

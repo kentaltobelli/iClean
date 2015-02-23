@@ -19,6 +19,7 @@ struct nav_control {
 };
 
 // Navigation dedicated functions
+void all_stop();
 void drive(int go_val, int turn_val);  // Generate motor commands given linear and rotational values
 void update_pos();  // Dead recon from last data gathered
 void drive_to (float x_dest, float y_dest, float ang_dest, int throttle);  // Navigates to desired location

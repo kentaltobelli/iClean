@@ -61,6 +61,7 @@ public:
   void increment_ticks()  { control.ticks++; }
   int get_last_ticks()  { return(control.last_ticks); }
   void control_motor(int desir_spd);  // Calculate control response
+  void halt();
 };
 
 #endif  // #ifndef _MOTOR_H

@@ -9,11 +9,17 @@ pos_data pos = {};
 
 // Initialize structure values
 nav_control nav = { 
-  60,  // P_coef
+  80,  // P_coef
   0,   // I_coef
   40,   // D_coef
 };
 
+
+void all_stop()
+{
+  Right.halt();
+  Left.halt();
+}
 
 
 // Drive to specified coordinate location
@@ -47,11 +53,6 @@ void drive_to (float x_dest, float y_dest, float ang_dest, int throttle) {
     drive(throttle, des_turn);
     delay(LOOP_TIME);
   }
-  
-  // Stop at destination
-  drive(0,0);
-  drive(0,0);
-  drive(0,0);
 }
 
 
